@@ -1,0 +1,8 @@
+bridge:
+  tablePrefix: box_
+  host: localhost
+  port: 3306
+  databseid: minecraft
+  username: root
+  password: ''
+  maxConnections: 0

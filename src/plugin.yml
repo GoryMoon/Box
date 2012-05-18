@@ -1,3 +1,16 @@
 name: Box
 main: com.github.GoryMoon.Box
-version: 0.1
+version: 0.4
+
+commands:
+  box:
+    description: Access to the main Box command
+    permission: Box.user
+
+permissions:
+  box.*:
+    description: Gives you all Box permissions.
+    default: false
+    children:
+      box.user: true
+      box.admin: true
