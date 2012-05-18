@@ -4,12 +4,15 @@ import java.io.*;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.logging.Level;
+
+import com.github.GoryMoon.Box;
 
 public class Utils {
 
+	private static Box plugin;
     /**
      * Downloads a file from a url and gives progress messages.
      *
@@ -27,7 +30,7 @@ public class Utils {
             }
             file.createNewFile();
             final int size = url.openConnection().getContentLength();
-            BukkitUtils.info("Downloading " + file.getName() + " (" + size / 1024 + "kb) ...");
+            plugin.getLogger().log(Level.INFO, "Downloading " + file.getName() + " (" + size / 1024 + "kb) ...");
             final InputStream in = url.openStream();
             final OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
             final byte[] buffer = new byte[1024];
@@ -37,13 +40,13 @@ public class Utils {
                 out.write(buffer, 0, len);
                 downloaded += len;
                 if ((int) ((System.currentTimeMillis() - start) / 500) > msgs) {
-                    BukkitUtils.info((int) (downloaded / (double) size * 100d) + "%");
+                	plugin.getLogger().log(Level.INFO, (int) (downloaded / (double) size * 100d) + "%");
                     msgs++;
                 }
             }
             in.close();
             out.close();
-            BukkitUtils.info("Download finished");
+            plugin.getLogger().log(Level.INFO, "Download finished");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -116,30 +119,6 @@ public class Utils {
             buffer.append(delimiter).append(s[i]);
         }
         return buffer.toString();
-    }
-
-    /**
-     * Concatenate any number of arrays of the same type
-     *
-     * @param <T>
-     * @param first
-     * @param rest
-     * @return
-     */
-    public static <T> T[] concat(T[] first, T[]... rest) {
-        // Read rest
-        int totalLength = first.length;
-        for (final T[] array : rest) {
-            totalLength += array.length;
-        }
-        // Concat with arraycopy
-        final T[] result = Arrays.copyOf(first, totalLength);
-        int offset = first.length;
-        for (final T[] array : rest) {
-            System.arraycopy(array, 0, result, offset, array.length);
-            offset += array.length;
-        }
-        return result;
     }
 
     /**
