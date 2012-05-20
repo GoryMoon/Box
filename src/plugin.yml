@@ -5,7 +5,7 @@ version: 0.4
 commands:
   box:
     description: Access to the main Box command
-    permission: Box.user
+    permission: box.user
 
 permissions:
   box.*:
