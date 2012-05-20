@@ -43,7 +43,7 @@ public class BoxCommandExecutor implements CommandExecutor{
      */
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     	final String name = command.getName();
-    	if (args.length != 0 || args == null && args[0].equalsIgnoreCase("help"))
+    	if (args.length != 0 || args != null && args[0].equalsIgnoreCase("help"))
 			return executeHelp(sender);
 		else if (name.equals("box"))
 			return executeBox(sender, args);
