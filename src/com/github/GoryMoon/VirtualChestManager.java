@@ -1,12 +1,17 @@
 package com.github.GoryMoon;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import com.github.GoryMoon.util.Teller;
 
 import net.minecraft.server.ItemStack;
 import net.minecraft.server.NBTBase;
@@ -17,6 +22,7 @@ public class VirtualChestManager {
 	private final Box plugin;
 	private final HashMap<String, VirtualChest> chests;
 	private final File dataFolder;
+	public int chestSize;
 
 	public VirtualChestManager(Box plugin, File dataFolder) {
 		this.plugin = plugin;
@@ -26,11 +32,14 @@ public class VirtualChestManager {
 
 	public VirtualChest getChest(String playerName) {
 		VirtualChest chest = chests.get(playerName.toLowerCase());
-
+		
 		if (chest == null) {
 			chest = new VirtualChest(plugin);
 			chests.put(playerName.toLowerCase(), chest);
 		}
+		int chestSize = chest.getSize();
+		this.chestSize = chestSize;
+		plugin.log.info("Chest size: " + chestSize);
 
 		return chest;
 	}
@@ -39,7 +48,38 @@ public class VirtualChestManager {
 		// Put a null to the map so we remember to delete the file when saving!
 		chests.put(playerName.toLowerCase(), null);
 	}
-
+	
+	public VirtualChest getChestMySql(String PlayerName){
+		VirtualChest chest = null;
+		return chest;
+	}
+	
+	public void SaveChestToMySQL(VirtualChest chest,String playerName){
+		int chestSize = chest.getSize();
+		String items = "";
+	    String datas = "";
+		for (int i = 0; i < chestSize; i++) {
+		      int item = 0;
+		      int data = 0;
+		      ItemStack stack = chest.getItem(i);
+		      if (stack != null) {
+		        item = stack.getItem(i).getTypeId();
+		        data = inv.getItem(i).getData().getData();
+		      }
+		      items = items + item + ",";
+		      datas = datas + data;
+		      if (i < chestSize -1) {
+		        datas = datas + ",";
+		      }
+		    }
+		for (int slot = 0; slot < chestSize; slot++) {
+			ItemStack stack = chest.getItem(slot);
+			if (stack != null) {
+				
+			}
+		}
+	}
+	
 	public int getChestCount() {
 		return chests.size();
 	}
